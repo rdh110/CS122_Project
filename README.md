@@ -12,11 +12,10 @@ Author 1: Huu Tinh Nguyen (Data collection and storage)
 
 Author 2: Ramjot Dhillon (Data analysis and visualization)
 
-Ramjot Dhillon, Huu Tinh Nguyen
 
 
 
-Project Description (5 sentences):
+Project Description:
 
 Our project will use the CDC PLACES county dataset to compare health estimates across counties. We will focus on obesity, diabetes, and physical inactivity. Users will be able to choose a state and health measure and see county results on a website. The program will download the data, save cleaned records in a local database, and create charts. We will explain missing values and avoid treating county comparisons as proof of cause and effect.
 
@@ -55,9 +54,12 @@ I plan to use Python's sqlite3 library. One table will store county names, state
 
 Data Analysis and Visualization Plan (Author 2: Ramjot Dhillon)
 
-Ramjot will focus on obesity, diabetes, and physical inactivity. For a selected state and measure, she plans to calculate the number of counties with data, the number with missing values, and the mean, median, lowest, and highest available estimates. We will label county averages clearly because an average of county estimates is not the same as an official state estimate.
+I will focus on obesity, diabetes, and physical inactivity, and all statistics and charts will only include counties in the selected state. For a selected state and measure, I plan to calculate the number of counties with data, the number with missing values, and the mean, median, lowest, and highest available estimates. I will label county averages clearly because they are not the same as an official state estimate.
 
-Ramjot plans to use Matplotlib to make a county comparison chart, a histogram, and a scatterplot comparing two measures. She will label each chart with the measure, type of estimate, and number of counties included. When a comparison needs two measures, she will use counties with both values and report how many were excluded. We will treat the results as county level patterns, not as proof of cause and effect.
+I plan to use SciPy to calculate the correlation and p-value between depression and obesity, depression and physical inactivity, and short sleep and depression. The analysis page will explain whether a relationship is present and significant. For each comparison, I will only use counties with both values and report how many were excluded. 
+
+I plan to use Matplotlib to make a county comparison chart, a histogram, and scatterplots with the user's county marked on each chart. Related scatterplots, such as depression vs obesity, depression vs physical inactivity, and short sleep vs depression, will be shown side by side so users can see whether the measures have any patterns. Each chart will be labeled with the measure, type of estimate, and number of counties included and excluded. I will treat the results as county level patterns, not as proof of cause and effect.
+
 
 ## Data Source
 
