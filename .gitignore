@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Health project files
+data/
+*.db
+static/charts/
+test_app.py
+
