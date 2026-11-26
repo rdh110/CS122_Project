@@ -90,7 +90,7 @@ def correlation(df, measure1, measure2, estimate="CrudePrev"):
     valid = values1.notna() & values2.notna()
 
     # return None if less than 3 counties have both values
-    if valid.sum() < 3:
+    if valid.sum() < 6:
         return None
 
     # compute the correlation and p-value 
@@ -113,7 +113,7 @@ def trend_line(df, measure1, measure2, estimate="CrudePrev"):
     both = df[[col1, col2]].dropna()
 
     # return None if less than 3 counties have both values
-    if len(both) < 3:
+    if len(both) < 6:
         return None
 
    # compute the coefficient (slope and intercept) of the trend line (y = mx + b)
@@ -148,8 +148,14 @@ def describe_correlations(result):
     else:
         significance = "Not significant"
 
+    # display for small p_value
+    if p < 0.001:
+        p_text = "p < 0.001"
+    else:
+        p_text = f"p = {p:.3f}"
+
     return (f"{strength} {direction} relationship, {significance} " 
-        f"(r = {r}, p = {p:.3f}).")
+        f"(r = {r}, {p_text}).")
 
 def all_correlations(df, estimate="CrudePrev"):
     # loop through every pair of measures
