@@ -122,16 +122,15 @@
 
     {% if heatmap %}
         <h3> How all measures relate to each other in {{state}}</h3>
-        <div style="display: flex; align-items: center; gap: 30px;">
-            <img src="/{{heatmap}}?v={{version}}" width="600">
-            <p>
-                Each square shows how closely two measures rise and fall together
-                across counties. Red means they tend to rise together, blue means
-                one tends to rise as the other falls, and white means there is no
-                clear pattern. The diagonal compares each measure to itself, so it
-                is always 1 and can be ignored.
-            </p>
-        </div>
+        <p>
+            Each square shows how closely two measures rise and fall together
+            across counties. Red means they tend to rise together, blue means
+            one tends to rise as the other falls, and white means there is no
+            clear pattern. The diagonal compares each measure to itself, so it
+            is always 1 and can be ignored.
+        </p>
+        <img src="/{{heatmap}}?v={{version}}" width="100%">
+        <br>
         <a href="/{{heatmap}}" download="{{state}}_heatmap.png">Download chart</a>
     {% endif %}
 
