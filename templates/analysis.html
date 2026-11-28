@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analysis Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
+</head>
+<body>
+    <h2>Analysis Page</h2>
+    <link rel="stylesheet" href=""
+    <p>
+        1. Choose a state to load its counties. <br>
+        2. Choose a county and a health measure. <br>
+        3. Click Submit to view the results.
+    </p>
+
+    <form action = '/analysis' method='get'>
+        <label> State: </label>
+        <select name="state" onchange="this.form.submit()">
+            {% if not state %}
+                <option value = "" selected disabled></option>
+            {% endif %}
+            {% for s in states %}
+                {% if s == state %}
+                    <option value="{{ s }}" selected > {{ s }} </option>
+                {% else %}
+                    <option value="{{ s }}" > {{ s }} </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label> County: </label>
+        <select name="county">
+            {% for c in counties %}
+                {% if c == county %}
+                    <option value="{{ c }}" selected > {{ c }} </option>
+                {% else %}
+                    <option value="{{ c }}" > {{ c }} </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label> Health measure: </label>
+        <select name="measure">
+            {% for m in measures %}
+                {% if m == measure %}
+                    <option value="{{ m }}" selected > {{ m }} </option>
+                {% else %}
+                    <option value="{{ m }}" > {{ m }} </option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <label> Numbers to use: </label>
+        {% if estimate == "AdjPrev" %}
+            <input type="radio" name="estimate" value="CrudePrev"> Actual %
+            <input type="radio" name="estimate" value="AdjPrev" checked> Adjusted for age
+        {% else %}
+            <input type="radio" name="estimate" value="CrudePrev" checked> Actual %
+            <input type="radio" name="estimate" value="AdjPrev"> Adjusted for age
+        {% endif %}
+        <br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if county %}
+        <p>You selected: {{ measure }} in {{county}}, {{state}}</p>
+    {% endif %}
+
+    {% if my_county %}
+        <h3> {{my_county.county}}, {{state}}: {{measure}} </h3>
+        <p>
+            {{my_county.county}}: {{my_county.value}}%
+            (average of all counties: {{my_county.state_county_avg}}%) <br>
+            Ranked {{my_county.rank}} out of {{my_county.out_of}} counties
+            (1 = highest)
+        </p>
+    {% endif %}
+    
+    {% if stats %}
+        <p>
+            Counties with data: {{stats.counties_with_data}},
+            missing: {{stats.counties_without_data}}<br>
+            Mean: {{stats.mean}}%, Median: {{stats.median}}%,
+            Lowest: {{stats.min}}%, Highest: {{stats.max}}%
+        </p>
+        <a href="{{ url_for('download_chart', state=state, measure=measure, estimate=estimate) }}">
+            Download results (CSV)
+        </a>
+    {% endif %}
+
+    {% if histogram %}
+        <h3>{{measure}} across all counties in {{state}}</h3>
+        <img src="/{{histogram}}?v={{version}}" width="600">
+        <br>
+        <a href="/{{histogram}}" download="{{state}}_{{measure}}_histogram.png">Download chart</a>
+    {% endif %}
+    
+    {% if bar_chart %}
+        <h3>How {{county}} compares to other counties in {{state}}</h3>
+        <img src="/{{bar_chart}}?v={{version}}" width="700">
+        <br>
+        <a href="/{{bar_chart}}" download="{{state}}_{{measure}}_bar_chart.png">Download chart</a>
+    {% endif %}
+
+    {% if scatter %}
+        <h3>Scatter Plot for {{county}} in {{state}}</h3>
+        <img src="/{{scatter}}?v={{version}}" width="700">
+        <br>
+        <a href="/{{scatter}}" download="{{state}}_{{measure}}_scatter.png">Download chart</a>
+        <h4>Scatter Plot Analysis:</h4>
+        <ul>
+            {% for result in scatter_results %}
+                <li>{{ result }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+
+    {% if heatmap %}
+        <h3> How all measures relate to each other in {{state}}</h3>
+        <div style="display: flex; align-items: center; gap: 30px;">
+            <img src="/{{heatmap}}?v={{version}}" width="600">
+            <p>
+                Each square shows how closely two measures rise and fall together
+                across counties. Red means they tend to rise together, blue means
+                one tends to rise as the other falls, and white means there is no
+                clear pattern. The diagonal compares each measure to itself, so it
+                is always 1 and can be ignored.
+            </p>
+        </div>
+        <a href="/{{heatmap}}" download="{{state}}_heatmap.png">Download chart</a>
+    {% endif %}
+
+</body>
+</html>

@@ -145,8 +145,10 @@ def make_scatter_plot(df, my_county, estimate="CrudePrev", pairs=SCATTER_PLOT_CO
                       filename="static/charts/scatter_plot.png"):
 
     # make one figure with a panel for each pair of measures
-    fig, axes = plt.subplots(1, len(pairs), figsize=(5*len(pairs), 5), squeeze=False)
-    axes = axes[0]  # flatten the axes array for easier indexing
+    n_cols = min(2, len(pairs))
+    n_rows = (len(pairs) + n_cols - 1) // n_cols
+    fig, axes = plt.subplots(n_rows, n_cols, figsize=(5*n_cols, 5*n_rows), squeeze=False)
+    axes = axes.flatten()  # flatten the axes array for easier indexing
     for ax, (x_measure, y_measure) in zip(axes, pairs):
         # define the column names for both measures
         x_col = MEASURES[x_measure] + "_" + estimate
@@ -198,6 +200,10 @@ def make_scatter_plot(df, my_county, estimate="CrudePrev", pairs=SCATTER_PLOT_CO
         ax.grid(linestyle="--", linewidth=0.5, alpha=0.5)
         ax.legend(fontsize=8)
 
+    # hide any unused subplots
+    for ax in axes[len(pairs):]:
+        ax.set_visible(False)
+        
     # add overall tile with estimate type
     fig.suptitle(ESTIMATE_LABELS[estimate])
 

@@ -23,6 +23,10 @@ def get_state_data(state):
     state_df = df[df["StateAbbr"] == state]
     return state_df
 
+def get_states():
+    df = pd.read_csv(DATA_PATH)
+    return sorted(df["StateAbbr"].dropna().unique().tolist())
+
 def get_counties(df):
     # make a sorted list of the county names for dropdown
     return sorted(df["CountyName"].dropna().unique().tolist())
